@@ -50,13 +50,18 @@ int line_limit(char line[]);
  **/
 void line_detab(char target[]);
 
+/**
+ * replaces TABWIDTH spaces with \t.
+ **/
+void line_entab(char target[]);
+
 
 int main()
 {
     char line[MAXLINE];
 
     while ((line_read(line, MAXLINE)) != 0) {
-        line_detab(line);
+        line_entab(line);
         printf("%s", line);
     }
 }
@@ -139,10 +144,34 @@ void line_detab(char target[])
                 modified[i + j + offset] = ' ';
 
             offset += (TABWIDTH - 1);
-            printf("%d\n" , offset);
         }
         else
             modified[i + offset] = target[i];
+    }
+
+    line_copy(target, modified);
+}
+
+void line_entab(char target[])
+{
+    int limit = line_limit(target);
+    char modified[MAXLINE];
+    int offset = 0;
+    int count = 0;
+
+    for (int i = 0; i <= limit; i++) {
+        if (target[i] == ' ') {
+            count++;
+        }
+
+        if (count == TABWIDTH) {
+            offset += (TABWIDTH - 1);
+            count = 0;
+            
+            modified[i - offset] = '\t';
+        }
+        else 
+            modified[i - offset] = target[i];
     }
 
     line_copy(target, modified);
