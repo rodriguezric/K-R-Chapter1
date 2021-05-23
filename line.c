@@ -17,7 +17,6 @@
  *
  * Mutations:
  *  (target[, source][, limit])
- *  Where 
  **/
 
 /**
