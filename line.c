@@ -56,6 +56,10 @@ void line_entab(char target[]);
 
 /**
  * Folds line into lines of max_width
+ * First the line is copied into a 
+ * temporary string and detabbed. 
+ * The detabbed line is iterated
+ * and folded to max_width chars
  ***/
 void line_fold(char target[], int max_width);
 
@@ -78,13 +82,17 @@ int line_read(char target[], int limit)
     target[i] = c;
     i++;
   }
-
   if (c == '\n') {
     target[i] = c;
     i++;
   }
 
   target[i] = '\0';
+
+  if (i >= limit) {
+    target[limit - 1] = '\n';
+    target[limit] = '\0';
+  }
 
   return i;
 }
